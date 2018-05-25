@@ -32,18 +32,10 @@ QUEUEHEADERS headers;
 QUEUEITEM head;
 
 void enqueue(QUEUEITEM *item) {
-	QUEUEITEM *temp;
-
-	temp = headers.tail;
-	printf("item address in enqueue %p, value %d\n", item, item->data);
-	headers.tail = item;
-	item->prev = temp;
+	item->prev = headers.tail;
 	item->next = NULL;
-	temp->next = item;
-
-//	headers.tail->next = &item;
-//	headers.tail = &item;
-//	headers.tail->next = NULL;
+	headers.tail->next = item;
+	headers.tail = item;
 }
 
 int main(void) {
