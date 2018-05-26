@@ -38,6 +38,15 @@ void enqueue(QUEUEITEM *item) {
 	headers.tail = item;
 }
 
+QUEUEITEM dequeue() {
+	QUEUEITEM *current_head = headers.head;
+	headers.head = current_head->next;
+	current_head->next = NULL;
+	headers.head->prev = NULL;
+
+	return *current_head;
+}
+
 int main(void) {
 	head.data = 1;
 	headers.head = &head;
@@ -51,13 +60,8 @@ int main(void) {
 	item1.data = 2;
 	item2.data = 3;
 
-	printf("item1 address %p\n", &item1);
-	printf("item2 address %p\n", &item2);
-
 	enqueue(&item1);
-	printf("LAST ELEMENT %p, with value %d\n", headers.tail, headers.tail->data);
 	enqueue(&item2);
-	printf("LAST ELEMENT %p, with value %d\n", headers.tail, headers.tail->data);
 
 	QUEUEITEM q = head;
 
@@ -70,6 +74,11 @@ int main(void) {
 
 		q = *q.next;
 	}
+
+	QUEUEITEM dequeued_node = dequeue();
+	printf("Dequeue node value, %d\n", dequeued_node.data);
+	dequeued_node = dequeue();
+	printf("Dequeue node value, %d\n", dequeued_node.data);
 
 	// create a new queueitem
 	//	enqueue(queueitem)
