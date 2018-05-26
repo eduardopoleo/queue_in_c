@@ -40,6 +40,19 @@ void enqueue(QUEUEITEM *item) {
 
 QUEUEITEM dequeue() {
 	QUEUEITEM *current_head = headers.head;
+
+	if (headers.head == NULL) {
+		printf("Current queue is empty, returning an unlinked item\n");
+		QUEUEITEM orphan_item;
+		return orphan_item;
+	}
+
+	if (current_head->next == NULL) {
+		printf("Current Head is the last node in the queue\n");
+		headers.head = NULL;
+		return *current_head;
+	}
+
 	headers.head = current_head->next;
 	current_head->next = NULL;
 	headers.head->prev = NULL;
@@ -76,6 +89,10 @@ int main(void) {
 	}
 
 	QUEUEITEM dequeued_node = dequeue();
+	printf("Dequeue node value, %d\n", dequeued_node.data);
+	dequeued_node = dequeue();
+	printf("Dequeue node value, %d\n", dequeued_node.data);
+	dequeued_node = dequeue();
 	printf("Dequeue node value, %d\n", dequeued_node.data);
 	dequeued_node = dequeue();
 	printf("Dequeue node value, %d\n", dequeued_node.data);
