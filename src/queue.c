@@ -29,9 +29,14 @@ typedef struct queueheaders {
 
 // why can't I play around with these vars on this scope?
 QUEUEHEADERS headers;
-QUEUEITEM head;
 
 void enqueue(QUEUEITEM *item) {
+	if (headers.head ==  NULL) {
+		printf("No items in the queue. Setting the given item as head and tail\n");
+		headers.head = item;
+		headers.tail = item;
+	}
+
 	item->prev = headers.tail;
 	item->next = NULL;
 	headers.tail->next = item;
@@ -40,7 +45,6 @@ void enqueue(QUEUEITEM *item) {
 
 QUEUEITEM dequeue() {
 	QUEUEITEM *current_head = headers.head;
-
 	if (headers.head == NULL) {
 		printf("Current queue is empty, returning an unlinked item\n");
 		QUEUEITEM orphan_item;
@@ -61,10 +65,6 @@ QUEUEITEM dequeue() {
 }
 
 int main(void) {
-	head.data = 1;
-	headers.head = &head;
-	headers.tail = &head;
-
 	// C does not like to when one uses uninitialized references.
 	// So when possible use the actual thing and use indirection when needed.
 	QUEUEITEM item1;
@@ -76,7 +76,7 @@ int main(void) {
 	enqueue(&item1);
 	enqueue(&item2);
 
-	QUEUEITEM q = head;
+	QUEUEITEM q = *headers.head;
 
 	while(1) {
 
@@ -97,14 +97,5 @@ int main(void) {
 	dequeued_node = dequeue();
 	printf("Dequeue node value, %d\n", dequeued_node.data);
 
-	// create a new queueitem
-	//	enqueue(queueitem)
-	//	--> associates the item with the current last
-	//	--> appends makes item last
-	//  dequeue()
-	//	--> makes second element heads
-	// 	--> sets null prev to old head
-	//  --> returns the dequeued element
-	// special case when the queue is empty.
 	return EXIT_SUCCESS;
 }
