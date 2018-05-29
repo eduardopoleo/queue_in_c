@@ -136,7 +136,7 @@ int main(void) {
 	QUEUEITEM *q = headers.head;
 
 	while(q != NULL) {
-		printf("data %d, address %p\n", q->data, &q);
+		printf("data %d, address %p\n", q->data, q);
 		q = q->next;
 	}
 
@@ -149,7 +149,7 @@ int main(void) {
 	q = copy_headers.head;
 
 	while(q != NULL) {
-		printf("data %d, address %p\n", q->data, &q);
+		printf("data %d, address %p\n", q->data, q);
 		q = q->next;
 	}
 
