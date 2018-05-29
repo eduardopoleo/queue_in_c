@@ -38,7 +38,7 @@ typedef struct queueheaders {
 // why can't I play around with these vars on this scope?
 
 void enqueue(QUEUEHEADERS *headers, QUEUEITEM *item) {
-	if (headers->head ==  NULL) {
+	if (headers->head == NULL) {
 		printf("No items in the queue. Setting the given item as head and tail\n");
 		headers->head = item;
 		headers->tail = item;
@@ -48,6 +48,7 @@ void enqueue(QUEUEHEADERS *headers, QUEUEITEM *item) {
 
 	item->prev = headers->tail;
 	item->next = NULL;
+
 	headers->tail->next = item;
 	headers->tail = item;
 }
@@ -70,22 +71,24 @@ int size(QUEUEHEADERS headers) {
 	return size;
 }
 
-//QUEUEHEADERS copy(QUEUEHEADERS headers) {
-//	QUEUEHEADERS copy_headers;
+QUEUEHEADERS copy(QUEUEHEADERS headers) {
+	QUEUEHEADERS copy_headers;
+	copy_headers.head = NULL;
+	copy_headers.tail = NULL;
+
+	QUEUEITEM *current_item = headers.head;
 //
-//	QUEUEITEM *current_item = headers.head;
+	while (current_item != NULL) {
+		QUEUEITEM *item = (QUEUEITEM *)malloc(sizeof(QUEUEITEM));
+		memcpy(item, current_item, sizeof(QUEUEITEM));
+		item->data = current_item->data;
+		enqueue(&copy_headers, item);
 //
-//	while (current_item != NULL) {
-//		QUEUEITEM *item = (QUEUEITEM *)malloc(sizeof(QUEUEITEM));
-//		memcpy(item, current_item, sizeof(QUEUEITEM));
-//		item->data = current_item->data;
-////		enqueue(copy_headers, item);
+		current_item = current_item->next;
+	}
 //
-//		current_item = current_item->next;
-//	}
-//
-//	return copy_headers;
-//}
+	return copy_headers;
+}
 
 QUEUEITEM dequeue(QUEUEHEADERS headers) {
 	// TODO remember to free non used memory.
@@ -128,12 +131,25 @@ int main(void) {
 
 	int queue_size = size(headers);
 
-	printf("Current queue size %d\n", queue_size);
+	printf("Original queue size %d\n", queue_size);
 
 	QUEUEITEM *q = headers.head;
 
 	while(q != NULL) {
-		printf("data %d\n", q->data);
+		printf("data %d, address %p\n", q->data, &q);
+		q = q->next;
+	}
+
+	QUEUEHEADERS copy_headers = copy(headers);
+
+	int copy_queue_size = size(copy_headers);
+
+	printf("Copy queue size %d\n", copy_queue_size);
+
+	q = copy_headers.head;
+
+	while(q != NULL) {
+		printf("data %d, address %p\n", q->data, &q);
 		q = q->next;
 	}
 
